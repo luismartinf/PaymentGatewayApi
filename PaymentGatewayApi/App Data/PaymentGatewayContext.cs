@@ -10,9 +10,7 @@ namespace PaymentGatewayApi.App_Data
     public class PaymentGatewayContext : DbContext, IPaymentGateContext
     {
         public PaymentGatewayContext(string connectionString) : base(connectionString)
-        {
-            Database.SetInitializer<PaymentGatewayContext>(new UniDBInitializer<PaymentGatewayContext>());
-        }
+        { }
 
         public virtual DbSet<Users> Users { get; set; } = null!;
         public virtual DbSet<Roles> Roles { get; set; } = null!;
@@ -62,44 +60,13 @@ namespace PaymentGatewayApi.App_Data
         {
             return Paymethods.Any(e => e.PaymethodId == id);
         }
-        private class UniDBInitializer<T> : DropCreateDatabaseAlways<PaymentGatewayContext>
+
+        public virtual Users? Findusertoken(string username)
         {
+            return Users.DefaultIfEmpty(null).First(user => user!.UserName.Equals(username, StringComparison.OrdinalIgnoreCase));
 
-            protected override void Seed(PaymentGatewayContext context)
-            {
-
-                IList<Roles> roles = new List<Roles>();
-
-                roles.Add(new Roles()
-                {
-                    RoleName = "Admin",
-                    UsersRole = new List<Users>()
-                });
-
-                roles.Add(new Roles()
-                {
-                    RoleName = "SuperAdmin",
-                    UsersRole = new List<Users>()
-                });
-
-                roles.Add(new Roles()
-                {
-                    RoleName = "Customer",
-                    UsersRole = new List<Users>()
-                });
-
-                roles.Add(new Roles()
-                {
-                    RoleName = "Seller",
-                    UsersRole = new List<Users>()
-                });
-
-
-                foreach (Roles role in roles)
-                    context.Roles.Add(role);
-                base.Seed(context);
-            }
         }
+       
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -119,9 +86,11 @@ namespace PaymentGatewayApi.App_Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Users>().HasIndex(u => u.UserName).IsUnique();
+
+            modelBuilder.Entity<Roles>().HasIndex(u => u.RoleName).IsUnique();
         }
     }
-
+    
     public class LibraryContextFactory : IDbContextFactory<PaymentGatewayContext>
     {
         public LibraryContextFactory()

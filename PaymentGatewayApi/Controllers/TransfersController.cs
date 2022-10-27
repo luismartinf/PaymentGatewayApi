@@ -35,7 +35,7 @@ namespace PaymentGatewayApi.Controllers
             var roleslist = roles.ToList();
             var authuserid = identity.Claims.Where(c => c.Type == "Id").Select(c => c.Value);
             var authuserlist = authuserid.ToList();
-            if (roleslist[0] == "Seller" || roleslist[0] == "Customer")
+            if (roleslist[0] == "3" || roleslist[0] == "4")
             { return _context.Transfers.Where(r => r.UserId.Equals(Convert.ToInt32(authuserlist[0]))).ToList(); };
             return _context.Transfers.ToList();
         }
@@ -79,7 +79,7 @@ namespace PaymentGatewayApi.Controllers
         // PUT api/<TransferController>/5
         [HttpPut("{id}")]
         [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "SuperAdmin, Admin")]
+        [Authorize(Roles = "1, 2")]
         public IActionResult Puttransfer(int id, Transfers transf)
         {
             if (id != transf.TransferId)
@@ -132,7 +132,7 @@ namespace PaymentGatewayApi.Controllers
         // DELETE api/<TransferController>/5
         [HttpDelete("{id}")]
         [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "SuperAdmin, Admin")]
+        [Authorize(Roles = "1, 2")]
 
         public ActionResult<Transfers> DeleteTransf(int id)
         {

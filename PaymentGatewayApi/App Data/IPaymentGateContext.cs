@@ -14,7 +14,7 @@ namespace PaymentGatewayApi.App_Data
 
         void MarkAsModified(Object item)
         {
-     
+
         }
 
         virtual bool RolesExists(int id)
@@ -37,7 +37,8 @@ namespace PaymentGatewayApi.App_Data
         virtual bool PaymethodExists(int id)
         {
             return true;
-        }
-
+        }        
+        virtual Users? Findusertoken(string username)
+        { return null; }
     }
 }

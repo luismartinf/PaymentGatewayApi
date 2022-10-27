@@ -25,7 +25,7 @@ namespace PaymentGatewayApi.Controllers
         // GET: api/<RolesController>
         [HttpGet]
         [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "SuperAdmin, Admin")]
+        [Authorize(Roles = "1, 2")]
         public ActionResult<IEnumerable<Roles>> GetRoles()
         {
             return _context.Roles.ToList();
@@ -33,9 +33,8 @@ namespace PaymentGatewayApi.Controllers
 
         // GET api/<RolesController>/5
         [HttpGet("{id}")]
-        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "SuperAdmin, Admin")]
-        public ActionResult<Roles> GetRolesbyId(int id)
+        [AllowAnonymous]
+          public ActionResult<Roles> GetRolesbyId(int id)
         {
             var roles = _context.Roles.Find(id);
 
@@ -50,7 +49,7 @@ namespace PaymentGatewayApi.Controllers
         // POST api/<RolesController>
         [HttpPost]
         [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "1")]
         public ActionResult<Roles> Post(Roles newrole)
         {
             _context.Roles.Add(newrole);
@@ -69,8 +68,9 @@ namespace PaymentGatewayApi.Controllers
 
         // PUT api/<RolesController>/5
         [HttpPut("{id}")]
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "1, 2")]
         public IActionResult PutRoles(int id, Roles role)
         {
             if (id != role.RolesId)
@@ -123,7 +123,7 @@ namespace PaymentGatewayApi.Controllers
         // DELETE api/<RolesController>/5
         [HttpDelete("{id}")]
         [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "1")]
         public ActionResult<Roles> DeleteRoles(int id)
         {
             var rolesdel = _context.Roles.Find(id);

@@ -1,4 +1,9 @@
 {
-  "ExpandedNodes": [],
+  "ExpandedNodes": [
+    "",
+    "\\PaymentGatewayApi",
+    "\\PaymentGatewayApi\\Migrations"
+  ],
+  "SelectedNode": "\\PaymentGatewayApi\\Migrations\\Configuration.cs",
   "PreviewInSolutionExplorer": false
 }

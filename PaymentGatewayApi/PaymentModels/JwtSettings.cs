@@ -2,21 +2,21 @@
 {
     public class JwtSettings
     {
-        public bool ValidateIssuerSigningKey { get; set; }
+        public bool ValidateIssuerSigningKey { get; set; } = true;
 
-        public string IssuerSigningKey { get; set; } = string.Empty;
+        public string IssuerSigningKey { get; set; } = "64A63153-11C1-4919-9133-EFAF99A9B456";
 
-        public bool ValidateIssuer { get; set; }
+        public bool ValidateIssuer { get; set; } = true;
 
-        public string ValidIssuer { get; set; } = string.Empty;
+        public string ValidIssuer { get; set; } = "https://localhost:44379";
 
-        public bool ValidateAudience { get; set; }
+        public bool ValidateAudience { get; set; } = true;
 
-        public string ValidAudience { get; set; } = string.Empty;
+        public string ValidAudience { get; set; } = "https://localhost:44379";
 
-        public bool RequireExpirationTime { get; set; }
+        public bool RequireExpirationTime { get; set; } = true;
 
-        public bool ValidateLifetime { get; set; }
+        public bool ValidateLifetime { get; set; } = true;
     }
 
     public class UserTokens

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
 namespace PaymentGatewayApi.PaymentModels
 {
@@ -12,12 +13,13 @@ namespace PaymentGatewayApi.PaymentModels
         {
             UserId = 0;
             UserName = string.Empty;
+            EmailAddress = string.Empty;
             Name = string.Empty;
             Password = string.Empty;
             PhoneNumber = 0;
-            URL = string.Empty;
+            URL = null;
             AddDate = DateTime.UnixEpoch;
-            UserRoles = new List<Roles>(); 
+            Roles = new List<Roles>(); 
         }
 
         [Key]
@@ -31,6 +33,10 @@ namespace PaymentGatewayApi.PaymentModels
 
         [Required]
         [Column(TypeName = "nvarchar")]
+        public string EmailAddress { get; set; }
+
+        [Required]
+        [Column(TypeName = "nvarchar")]
         public string Name { get; set; }
 
         [Required]
@@ -38,8 +44,8 @@ namespace PaymentGatewayApi.PaymentModels
         public string Password { get; set; }
 
         [Required]
-        [Column(TypeName = "int")]
-        public int PhoneNumber { get; set; }
+        [Column(TypeName = "bigint")]
+        public long PhoneNumber { get; set; }
 
 #nullable enable
         [Column(TypeName = "nvarchar")]
@@ -49,10 +55,17 @@ namespace PaymentGatewayApi.PaymentModels
         [Required]
         [Column(TypeName = "DateTime")]
         public DateTime AddDate { get; set; }
-        public virtual ICollection<Roles> UserRoles { get; set; }
+        public virtual ICollection<Roles> Roles { get; set; }
     }
     public class Roles
     {
+        public Roles()
+        {
+            RolesId = 0;
+            RoleName = string.Empty;
+            Users = new List<Users>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RolesId { get; set; }
@@ -60,21 +73,23 @@ namespace PaymentGatewayApi.PaymentModels
         [Required]
         [Column(TypeName = "nvarchar")]
         public string RoleName { get; set; }
-        public virtual ICollection<Users> UsersRole { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Users> Users { get; set; }
 
     }
 
-    public class UsersRoles
-    {
-        [Key, Column(Order = 1)]
-        public int UserId { get; set; }
+    //public class UsersRoles
+    //{
+    //    [Key, Column(Order = 1)]
+    //    public int UserId { get; set; }
 
-        [Key, Column(Order = 2)]
-        public int RoleId { get; set; }
+    //    [Key, Column(Order = 2)]
+    //    public int RoleId { get; set; }
 
-        public Users User { get; set; }
-        public Roles Role { get; set; }
-    }
+    //    public Users User { get; set; }
+    //    public Roles Role { get; set; }
+    //}
 
     public class UserLogins
     {

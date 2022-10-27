@@ -43,6 +43,7 @@ namespace PaymentGatewayApi.App_Data
             userToken.UserName = model.UserName;
             userToken.UserId = model.UserId;
             userToken.GuidId = Id;
+            userToken.Roles = model.Roles;
             return userToken;
         }
     }

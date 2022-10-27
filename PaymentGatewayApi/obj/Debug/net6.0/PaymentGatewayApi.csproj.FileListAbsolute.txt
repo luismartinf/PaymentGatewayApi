@@ -272,3 +272,5 @@ C:\Users\luis.martin\source\repos\PaymentGatewayApi\PaymentGatewayApi\bin\Debug\
 C:\Users\luis.martin\source\repos\PaymentGatewayApi\PaymentGatewayApi\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\luis.martin\source\repos\PaymentGatewayApi\PaymentGatewayApi\obj\Debug\net6.0\PaymentGatewayApi.Migrations.InitialCreate.resources
 C:\Users\luis.martin\source\repos\PaymentGatewayApi\PaymentGatewayApi\obj\Debug\net6.0\PaymentGatewayApi.csproj.GenerateResource.cache
+C:\Users\luis.martin\source\repos\PaymentGatewayApi\PaymentGatewayApi\obj\Debug\net6.0\PaymentGatewayApi.Migrations.WithoutDataAnnotations.resources
+C:\Users\luis.martin\source\repos\PaymentGatewayApi\PaymentGatewayApi\obj\Debug\net6.0\PaymentGatewayApi.Migrations.WithoutDataAnnotations1.resources

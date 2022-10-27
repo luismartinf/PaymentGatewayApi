@@ -38,7 +38,7 @@ namespace PaymentGatewayApi.Controllers
             var roleslist = roles.ToList();
             var authuserid = identity.Claims.Where(c => c.Type=="Id").Select(c => c.Value);
             var authuserlist = authuserid.ToList();
-            if (roleslist[0] == "Seller" || roleslist[0] == "Customer")
+            if (roleslist[0] == "3" || roleslist[0] == "4")
             { return _context.Transactions.Where(r => r.UserId.Equals(Convert.ToInt32(authuserlist[0]))).ToList(); };
             return _context.Transactions.ToList();
         }

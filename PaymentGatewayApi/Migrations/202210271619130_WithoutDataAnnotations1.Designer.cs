@@ -7,13 +7,13 @@ namespace PaymentGatewayApi.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class InitialCreate : IMigrationMetadata
+    public sealed partial class WithoutDataAnnotations1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(WithoutDataAnnotations1));
         
         string IMigrationMetadata.Id
         {
-            get { return "202210181957455_Initial Create"; }
+            get { return "202210271619130_WithoutDataAnnotations1"; }
         }
         
         string IMigrationMetadata.Source

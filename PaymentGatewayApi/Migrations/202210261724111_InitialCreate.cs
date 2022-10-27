@@ -13,7 +13,7 @@
                     {
                         PaymethodId = c.Int(nullable: false, identity: true),
                         TypePayment = c.String(nullable: false, maxLength: 4000),
-                        PaymentNum = c.Int(nullable: false),
+                        PaymentNum = c.Long(nullable: false),
                         BillingAdress = c.String(nullable: false, maxLength: 500),
                         UserId = c.Int(nullable: false),
                     })
@@ -29,12 +29,26 @@
                         UserName = c.String(nullable: false, maxLength: 100),
                         Name = c.String(nullable: false, maxLength: 4000),
                         Password = c.String(nullable: false, maxLength: 4000),
-                        PhoneNumber = c.Int(nullable: false),
+                        PhoneNumber = c.Long(nullable: false),
                         URL = c.String(maxLength: 4000),
                         AddDate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.UserId)
                 .Index(t => t.UserName, unique: true);
+            
+            CreateTable(
+                "dbo.UsersRoles",
+                c => new
+                    {
+                        UserId = c.Int(nullable: false),
+                        RoleId = c.Int(nullable: false),
+                        Role_RolesId = c.Int(),
+                    })
+                .PrimaryKey(t => new { t.UserId, t.RoleId })
+                .ForeignKey("dbo.Roles", t => t.Role_RolesId)
+                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId)
+                .Index(t => t.Role_RolesId);
             
             CreateTable(
                 "dbo.Roles",
@@ -61,7 +75,7 @@
                         PaymethodId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.TransactionId)
-                .ForeignKey("dbo.Paymethods", t => t.PaymethodId, cascadeDelete: true)
+                .ForeignKey("dbo.Paymethods", t => t.PaymethodId, cascadeDelete: false)
                 .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: false)
                 .Index(t => t.UserId)
                 .Index(t => t.PaymethodId);
@@ -83,19 +97,6 @@
                 .Index(t => t.TransactionId)
                 .Index(t => t.UserId);
             
-            CreateTable(
-                "dbo.RolesUsers",
-                c => new
-                    {
-                        Roles_RolesId = c.Int(nullable: false),
-                        Users_UserId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.Roles_RolesId, t.Users_UserId })
-                .ForeignKey("dbo.Roles", t => t.Roles_RolesId, cascadeDelete: true)
-                .ForeignKey("dbo.Users", t => t.Users_UserId, cascadeDelete: true)
-                .Index(t => t.Roles_RolesId)
-                .Index(t => t.Users_UserId);
-            
         }
         
         public override void Down()
@@ -105,20 +106,20 @@
             DropForeignKey("dbo.Transactions", "UserId", "dbo.Users");
             DropForeignKey("dbo.Transactions", "PaymethodId", "dbo.Paymethods");
             DropForeignKey("dbo.Paymethods", "UserId", "dbo.Users");
-            DropForeignKey("dbo.RolesUsers", "Users_UserId", "dbo.Users");
-            DropForeignKey("dbo.RolesUsers", "Roles_RolesId", "dbo.Roles");
-            DropIndex("dbo.RolesUsers", new[] { "Users_UserId" });
-            DropIndex("dbo.RolesUsers", new[] { "Roles_RolesId" });
+            DropForeignKey("dbo.UsersRoles", "UserId", "dbo.Users");
+            DropForeignKey("dbo.UsersRoles", "Role_RolesId", "dbo.Roles");
             DropIndex("dbo.Transfers", new[] { "UserId" });
             DropIndex("dbo.Transfers", new[] { "TransactionId" });
             DropIndex("dbo.Transactions", new[] { "PaymethodId" });
             DropIndex("dbo.Transactions", new[] { "UserId" });
+            DropIndex("dbo.UsersRoles", new[] { "Role_RolesId" });
+            DropIndex("dbo.UsersRoles", new[] { "UserId" });
             DropIndex("dbo.Users", new[] { "UserName" });
             DropIndex("dbo.Paymethods", new[] { "UserId" });
-            DropTable("dbo.RolesUsers");
             DropTable("dbo.Transfers");
             DropTable("dbo.Transactions");
             DropTable("dbo.Roles");
+            DropTable("dbo.UsersRoles");
             DropTable("dbo.Users");
             DropTable("dbo.Paymethods");
         }

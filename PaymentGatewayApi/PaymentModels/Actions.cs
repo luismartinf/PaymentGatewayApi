@@ -127,8 +127,8 @@ namespace PaymentGatewayApi.PaymentModels
         public string TypePayment { get; set; }
 
         [Required]
-        [Column(TypeName = "int")]
-        public int PaymentNum { get; set; }
+        [Column(TypeName = "bigint")]
+        public long PaymentNum { get; set; }
 
         [Required]
         [Column(TypeName = "nvarchar")]

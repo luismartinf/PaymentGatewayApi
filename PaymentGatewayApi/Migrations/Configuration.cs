@@ -15,11 +15,41 @@
 
         protected override void Seed(PaymentGatewayApi.App_Data.PaymentGatewayContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            IList<Roles> roles = new List<Roles>();
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method
-            //  to avoid creating duplicate seed data.
-            
+            roles.Add(new Roles()
+            {
+                RolesId = 1,
+                RoleName = "SuperAdmin",
+                Users = new List<Users>()
+            });
+
+            roles.Add(new Roles()
+            {
+                RolesId = 2,
+                RoleName = "Admin",
+                Users = new List<Users>()
+            });
+
+            roles.Add(new Roles()
+            {
+                RolesId = 3,
+                RoleName = "Seller",
+                Users = new List<Users>()
+            });
+
+            roles.Add(new Roles()
+            {
+                RolesId = 4,
+                RoleName = "Customer",
+                Users = new List<Users>()
+            });
+
+
+            foreach (var role in roles)
+            { context.Roles.AddOrUpdate(role); }
+
+            base.Seed(context);
         }
     }
 }
