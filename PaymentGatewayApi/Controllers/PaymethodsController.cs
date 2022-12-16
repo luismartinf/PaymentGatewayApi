@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentGatewayApi.App_Data;
 using PaymentGatewayApi.PaymentModels;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;

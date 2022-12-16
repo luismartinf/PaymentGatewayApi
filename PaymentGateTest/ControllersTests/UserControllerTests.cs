@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using PaymentGatewayApi.PaymentModels;
 using PaymentGatewayApi.Controllers;
 using FakeItEasy;
 using PaymentGatewayApi.App_Data;
-using System.Web.Http.Results;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
-using NuGet.Common;
-using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 
-namespace PaymentGateTest
+namespace PaymentGatewayApiTests.ControllersTests
 {
     [TestClass]
-    public class UserControllerTest
+    public class UserControllerTests
     {
         private IPaymentGateContext _context = new PaymentGatewayContext("Server=ASPLAPLTM095;Database=PaymentGatewayApiDB;Trusted_Connection=True;MultipleActiveResultSets=True;");
         private readonly IConfiguration _config = WebApplication.Create().Configuration;
@@ -32,7 +23,7 @@ namespace PaymentGateTest
         {
             // Arrange
             IPaymentGateContext mockRepository = A.Fake<IPaymentGateContext>();
-            UsersController fakecontroller = A.Fake<UsersController>(x => x.WithArgumentsForConstructor(() => new UsersController(null,mockRepository)));
+            UsersController fakecontroller = A.Fake<UsersController>(x => x.WithArgumentsForConstructor(() => new UsersController(null, mockRepository)));
             var dummies = (List<Users>)A.CollectionOfDummy<Users>(Elemntsindb());
             A.CallTo(() => fakecontroller.GetUsers()).Returns(dummies);
 
@@ -46,17 +37,17 @@ namespace PaymentGateTest
             Assert.AreEqual(dummies.Count, content?.Count);
         }
 
-        
+
         [TestMethod]
         public void Getuserbyid()
         {
             // Arrange
             IPaymentGateContext mockRepository = A.Fake<IPaymentGateContext>();
-            A.CallTo(() => mockRepository.Users.Find(2)).Returns(new Users {  UserId= 2,UserName= "raulmartinez", EmailAddress= "rmartin45@hotmail.com",Name= "RaulMartinez",Password= "Ternera4628%",PhoneNumber= 5538720193,URL= null,AddDate = DateTime.UnixEpoch,UpdateDate= DateTime.UnixEpoch, Roles=null});
+            A.CallTo(() => mockRepository.Users.Find(2)).Returns(new Users { UserId = 2, UserName = "raulmartinez", EmailAddress = "rmartin45@hotmail.com", Name = "RaulMartinez", Password = "Ternera4628%", PhoneNumber = 5538720193, URL = null, AddDate = DateTime.UnixEpoch, UpdateDate = DateTime.UnixEpoch, Roles = null });
 
             // Act
-            var mockcontroller = new UsersController(null,mockRepository);
-            var controller = new UsersController(null,null);
+            var mockcontroller = new UsersController(null, mockRepository);
+            var controller = new UsersController(null, null);
             var fakeLendee = mockcontroller.GetUserbyId(2).Value; ;
             var contentResult = controller.GetUserbyId(2).Value;
 
@@ -76,7 +67,7 @@ namespace PaymentGateTest
             A.CallTo(() => mockRepository.Users.Find(Elemntsindb() + 5))!.Returns(null);
 
             // Act
-            var controller = new UsersController(null,mockRepository);
+            var controller = new UsersController(null, mockRepository);
             var actionResult = controller.GetUserbyId(Elemntsindb() + 5).Result;
 
 
@@ -93,12 +84,12 @@ namespace PaymentGateTest
             // Arrange
             IPaymentGateContext mockRepository = A.Fake<IPaymentGateContext>();
             UsersController controller = new(null, mockRepository);
-            List<Roles> roleadd = new() { new Roles{ RolesId = 1, RoleName = "SuperAdmin", Users = null } };
-            var user= new Users{ UserId = Elemntsindb() + 1, UserName = "raulmartinez", EmailAddress = "rmartin45@hotmail.com", Name = "RaulMartinez", Password = "Ternera4628%", PhoneNumber = 5538720193, URL = null, AddDate = DateTime.UnixEpoch, UpdateDate = DateTime.UnixEpoch, Roles = roleadd };
+            List<Roles> roleadd = new() { new Roles { RolesId = 1, RoleName = "SuperAdmin", Users = null } };
+            var user = new Users { UserId = Elemntsindb() + 1, UserName = "raulmartinez", EmailAddress = "rmartin45@hotmail.com", Name = "RaulMartinez", Password = "Ternera4628%", PhoneNumber = 5538720193, URL = null, AddDate = DateTime.UnixEpoch, UpdateDate = DateTime.UnixEpoch, Roles = roleadd };
             A.CallTo(() => mockRepository.Users.Add(user)).Returns(user);
             A.CallTo(() => mockRepository.Roles.Attach(A<Roles>.Ignored)).Returns(roleadd[0]);
             A.CallTo(() => mockRepository.Findusertoken(A<string>.Ignored)).Returns(user);
-            
+
             // Act
             var actionResult = controller.PostUser(user);
             var token = controller.CreateToken(new UserLogins { UserName = user.UserName, Password = user.Password }).Value!.Token;
@@ -121,13 +112,13 @@ namespace PaymentGateTest
             // Arrange
             IPaymentGateContext mockRepository = A.Fake<IPaymentGateContext>();
             var fakeuser = A.Fake<Users>();
-            A.CallTo(() => fakeuser.Roles).Returns(new List<Roles>{new Roles { RolesId = 1, RoleName = "SuperAdmin", Users = null }, new Roles { RolesId = 4, RoleName = "Customer", Users = null } } );
-            A.CallTo(() => mockRepository.Addusersinroles(A<Roles>.Ignored,fakeuser)).Throws(new NotImplementedException());
+            A.CallTo(() => fakeuser.Roles).Returns(new List<Roles> { new Roles { RolesId = 1, RoleName = "SuperAdmin", Users = null }, new Roles { RolesId = 4, RoleName = "Customer", Users = null } });
+            A.CallTo(() => mockRepository.Addusersinroles(A<Roles>.Ignored, fakeuser)).Throws(new NotImplementedException());
 
             // Act
-            UsersController controller = new(null,mockRepository);
+            UsersController controller = new(null, mockRepository);
             var actionResult = controller.PostUser(fakeuser);
-          
+
             // Assert
             A.CallTo(() => mockRepository.Users.Add(A<Users>.Ignored)).MustHaveHappened();
             A.CallTo(() => mockRepository.Addusersinroles(A<Roles>.Ignored, fakeuser)).MustHaveHappened();
@@ -144,7 +135,7 @@ namespace PaymentGateTest
             UsersController controller = new(null, mockRepository);
             List<Roles> roleadd = new() { new Roles { RolesId = 1, RoleName = "SuperAdmin", Users = null } };
             var user = new Users { UserId = Elemntsindb() + 1, UserName = "raulmartinez", EmailAddress = "rmartin45@hotmail.com", Name = "RaulMartinez", Password = "Ternera4628%", PhoneNumber = 5538720193, URL = null, AddDate = DateTime.UnixEpoch, UpdateDate = DateTime.UnixEpoch, Roles = roleadd };
-            
+
             A.CallTo(() => mockRepository.Users.Add(user)).Returns(user);
             A.CallTo(() => mockRepository.Roles.Attach(A<Roles>.Ignored)).Returns(roleadd[0]);
             A.CallTo(() => mockRepository.SaveChanges()).Throws(new InvalidOperationException());
@@ -176,16 +167,16 @@ namespace PaymentGateTest
             A.CallTo(() => fakeuser.Roles).Returns(new List<Roles> { new Roles { RolesId = 2, RoleName = "Admin" }, new Roles { RolesId = 4, RoleName = "Customer" } });
 
             //Act
-            var usersController = new UsersController(null,fakecontext);
+            var usersController = new UsersController(null, fakecontext);
             var actionResult = usersController.CreateToken(new UserLogins { UserName = "fakeuser", Password = "fakepassword" }).Value;
-            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(actionResult!.Token,validateParameters(_config) , out SecurityToken validatedToken);
+            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(actionResult!.Token, validateParameters(_config), out SecurityToken validatedToken);
             var usernametok = principal.FindFirstValue(ClaimTypes.Name);
 
             //Assert
             A.CallTo(() => fakecontext.Findusertoken(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => fakeuser.Roles).MustHaveHappened();
             Assert.IsInstanceOfType(actionResult.GuidId, typeof(Guid));
-            Assert.AreEqual(actionResult.UserName,usernametok);
+            Assert.AreEqual(actionResult.UserName, usernametok);
         }
 
         [TestMethod]
@@ -198,7 +189,7 @@ namespace PaymentGateTest
             //Act
             var usersController = new UsersController(null, fakecontext);
             var actionResult = usersController.CreateToken(new UserLogins { UserName = "fakeuser", Password = "fakepassword" });
-           
+
             //Assert
             A.CallTo(() => fakecontext.Findusertoken(A<string>.Ignored)).MustHaveHappened();
             Assert.IsNotNull(actionResult);
@@ -215,7 +206,7 @@ namespace PaymentGateTest
             //Act
             var usersController = new UsersController(null, fakecontext);
             var actionResult = usersController.CreateToken(new UserLogins { UserName = "fakeuser", Password = "fakepassword" });
-           
+
             //Assert
             A.CallTo(() => fakecontext.Findusertoken(A<string>.Ignored)).MustHaveHappened();
             Assert.IsNotNull(actionResult);
@@ -237,27 +228,27 @@ namespace PaymentGateTest
             //Assert
             A.CallTo(() => fakecontext.Findusertoken(A<string>.Ignored)).MustHaveHappened();
             Assert.IsNotNull(actionResult);
-            Assert.IsInstanceOfType(actionResult.Result, typeof(Microsoft.AspNetCore.Mvc.BadRequestObjectResult));
+            Assert.IsInstanceOfType(actionResult.Result, typeof(BadRequestObjectResult));
         }
 
         [TestMethod]
-        public void PutReturnOkwithoutroles() 
+        public void PutReturnOkwithoutroles()
         {
             //Arrange
             IPaymentGateContext mockRepository = A.Fake<IPaymentGateContext>();
             var fakeuser = A.Fake<Users>();
             A.CallTo(() => fakeuser.UserId).Returns(2);
-            A.CallTo(() => mockRepository.Users.Find(2)).Returns(new Users {UserId=2,Name="Roberto Perez",EmailAddress="Robper@gmail.com",UserName="robertoperez", Password="Centauro$456",PhoneNumber=5563490231,URL=null, Roles = new List<Roles> { new Roles { RolesId = 2, RoleName = "Admin" ,Users=null}, new Roles { RolesId = 4, RoleName = "Customer", Users=null } }, AddDate=DateTime.Now});
+            A.CallTo(() => mockRepository.Users.Find(2)).Returns(new Users { UserId = 2, Name = "Roberto Perez", EmailAddress = "Robper@gmail.com", UserName = "robertoperez", Password = "Centauro$456", PhoneNumber = 5563490231, URL = null, Roles = new List<Roles> { new Roles { RolesId = 2, RoleName = "Admin", Users = null }, new Roles { RolesId = 4, RoleName = "Customer", Users = null } }, AddDate = DateTime.Now });
             A.CallTo(() => fakeuser.Roles).Returns(new List<Roles> { new Roles { RolesId = 2, RoleName = "Admin", Users = null }, new Roles { RolesId = 4, RoleName = "Customer", Users = null } });
 
             //Act
-            UsersController controller = new(null,mockRepository);
+            UsersController controller = new(null, mockRepository);
             var actionResult = controller.Putuser(2, fakeuser);
 
             //Assert
             A.CallTo(() => fakeuser.UserId).MustHaveHappened();
             A.CallTo(() => mockRepository.Users.Find(2)).MustHaveHappened();
-            A.CallTo(() => mockRepository.Anyexceprole(A<Users>.Ignored,A<Users>.Ignored)).MustHaveHappenedTwiceOrMore();
+            A.CallTo(() => mockRepository.Anyexceprole(A<Users>.Ignored, A<Users>.Ignored)).MustHaveHappenedTwiceOrMore();
             A.CallTo(() => mockRepository.Roles.Attach(A<Roles>.Ignored)).MustNotHaveHappened();
             A.CallToSet(() => fakeuser.UpdateDate).MustHaveHappened();
             A.CallTo(() => mockRepository.MarkAsModified(A<Users>.Ignored)).MustHaveHappened();
@@ -278,7 +269,7 @@ namespace PaymentGateTest
             A.CallTo(() => fakeuser.Roles).Returns(new List<Roles> { new Roles { RolesId = 1, RoleName = "SuperAdmin", Users = null }, new Roles { RolesId = 4, RoleName = "Customer", Users = null } });
             A.CallTo(() => mockRepository.Delusersinroles(A<Roles>.Ignored, A<Users>.Ignored)).Returns(true);
             A.CallTo(() => mockRepository.Anyexceprole(A<Users>.Ignored, A<Users>.Ignored)).Returns(true);
-            
+
             //Act
             UsersController controller = new(null, mockRepository);
             var actionResult = controller.Putuser(2, fakeuser);
@@ -308,7 +299,7 @@ namespace PaymentGateTest
             var fakerole = A.Fake<Roles>();
             A.CallTo(() => fakeuser.UserId).Returns(2);
             A.CallTo(() => mockRepository.Users.Find(2)).Throws(new InvalidOperationException());
-            
+
             //Act
             UsersController controller = new(null, mockRepository);
             var actionResult = controller.Putuser(2, fakeuser);
@@ -329,7 +320,7 @@ namespace PaymentGateTest
             var fakeuser = A.Fake<Users>();
             var fakerole = A.Fake<Roles>();
             A.CallTo(() => fakeuser.UserId).Returns(2);
-            
+
             //Act
             UsersController controller = new(null, mockRepository);
             var actionResult = controller.Putuser(4, fakeuser);
@@ -446,10 +437,10 @@ namespace PaymentGateTest
         {
             // Arrange
             IPaymentGateContext mockRepository = A.Fake<IPaymentGateContext>();
-            A.CallTo(() => mockRepository.Users.Find(2)).Returns(A.Fake<Users>()) ;
+            A.CallTo(() => mockRepository.Users.Find(2)).Returns(A.Fake<Users>());
 
             // Act
-            UsersController controller = new(null,mockRepository);
+            UsersController controller = new(null, mockRepository);
             var actionResult = controller.Delete(2);
 
             // Assert
@@ -468,7 +459,7 @@ namespace PaymentGateTest
             A.CallTo(() => mockRepository.Users.Find(Elemntsindb() + 5))!.Returns(null);
 
             // Act
-            UsersController controller = new(null,mockRepository);
+            UsersController controller = new(null, mockRepository);
             var actionResult = controller.Delete(Elemntsindb() + 5);
 
             // Assert
@@ -488,10 +479,10 @@ namespace PaymentGateTest
             A.CallTo(() => mockRepository.Users.Remove(A<Users>.Ignored)).Throws(new InvalidOperationException());
 
             // Act
-            UsersController controller = new(null,mockRepository);
+            UsersController controller = new(null, mockRepository);
             ActionResult<Users> actionResult;
-            try {actionResult = controller.Delete(3);}
-            catch {actionResult = new Microsoft.AspNetCore.Mvc.BadRequestResult();}
+            try { actionResult = controller.Delete(3); }
+            catch { actionResult = new Microsoft.AspNetCore.Mvc.BadRequestResult(); }
 
             // Assert
             A.CallTo(() => mockRepository.Users.Find(3)).MustHaveHappened();
@@ -508,7 +499,7 @@ namespace PaymentGateTest
             var elementsdb = _context.Users.ToList().Count; ;
             return elementsdb;
         }
-        
+
         private TokenValidationParameters validateParameters(IConfiguration config)
         {
             var validateParameters = new TokenValidationParameters

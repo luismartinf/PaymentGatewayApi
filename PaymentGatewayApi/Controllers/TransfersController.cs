@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentGatewayApi.App_Data;
-using System.Data.Entity;
 using PaymentGatewayApi.PaymentModels;
 using System.Data.Entity.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -71,6 +71,9 @@ namespace PaymentGatewayApi.Controllers
             newtransf!.UserTransfers = updateuser!;
             Transactions? updatetrans = new TransactionsController(_context).GetTransactionbyId(newtransf.TransactionId).Value;
             newtransf!.TransTransfers = updatetrans!;
+            newtransf!.TransTransfers.UserTrans = null;
+            newtransf.TransferDate = DateTime.Now;
+            newtransf!.TransTransfers.PaymethodTrans = null;
 
             try
             {
@@ -96,11 +99,9 @@ namespace PaymentGatewayApi.Controllers
                 return BadRequest();
             }
 
-            //_context.Entry(BookModel).State = EntityState.Modified;
-            _context.MarkAsModified(transf);
-
             try
             {
+                _context.MarkAsModified(transf);
                 _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)

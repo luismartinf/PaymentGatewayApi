@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentGateTest
+namespace PaymentGatewayApiTests.ControllersTests
 {
-    internal class TransferConrollerTests
+    internal class RolesControllerTest
     {
     }
 }

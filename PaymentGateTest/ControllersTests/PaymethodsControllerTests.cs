@@ -1,21 +1,23 @@
-﻿using FakeItEasy;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+global using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PaymentGatewayApi.App_Data;
-using PaymentGatewayApi.Controllers;
+using FakeItEasy;
 using PaymentGatewayApi.PaymentModels;
-using System;
-using System.Collections.Generic;
+using PaymentGatewayApi.Controllers;
+using System.Web.Http.Results;
+using Microsoft.AspNetCore.Mvc;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
+using System.Data.Entity.Validation;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+using NuGet.Common;
+using System.Net.WebSockets;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace PaymentGateTest
+namespace PaymentGatewayApiTests.ControllerTest
 {
     [TestClass]
-    public class TransactionsControllerTest
+    public class PaymethodsControllerTests
     {
         private IPaymentGateContext _context = new PaymentGatewayContext("Server=ASPLAPLTM095;Database=PaymentGatewayApiDB;Trusted_Connection=True;MultipleActiveResultSets=True;");
 
@@ -30,7 +32,7 @@ namespace PaymentGateTest
 
             var tokencontroller = new UsersController(null, _context);
             var accesstoken = tokencontroller.CreateToken(new UserLogins { UserName = "raulmartinez", Password = "Ternera4628%" }).Value!;
-            var claims = JWTHelpMethods.GetClaims(accesstoken, accesstoken.GuidId);
+            var claims = accesstoken.GetClaims(accesstoken.GuidId);
             ClaimsIdentity identity = new(); identity.AddClaims(claims);
             DefaultHttpContext httpContext = new(); httpContext.User.AddIdentity(identity);
 
@@ -55,7 +57,7 @@ namespace PaymentGateTest
 
             var tokencontroller = new UsersController(null, _context);
             var accesstoken = tokencontroller.CreateToken(new UserLogins { UserName = "enriquericarte", Password = "Ligurdas453$" }).Value!;
-            var claims = JWTHelpMethods.GetClaims(accesstoken, accesstoken.GuidId);
+            var claims = accesstoken.GetClaims(accesstoken.GuidId);
             ClaimsIdentity identity = new();
             identity.AddClaims(claims);
             var httpContext = new DefaultHttpContext();
@@ -85,7 +87,7 @@ namespace PaymentGateTest
             var actionResult = controller.GetPaymethods();
 
             //Assert
-            Assert.IsInstanceOfType(actionResult, typeof(ActionResult<System.Collections.Generic.IEnumerable<Paymethods>>));
+            Assert.IsInstanceOfType(actionResult, typeof(ActionResult<IEnumerable<Paymethods>>));
             Assert.IsInstanceOfType(actionResult.Result, typeof(NoContentResult));
         }
 
@@ -421,9 +423,8 @@ namespace PaymentGateTest
 
         private int Elemntsindb()
         {
-            var elementsdb = _context.Transactions.ToList().Count; ;
+            var elementsdb = _context.Paymethods.ToList().Count; ;
             return elementsdb;
         }
     }
 }
-

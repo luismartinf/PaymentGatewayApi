@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using System.Transactions;
 using System.Text.Json.Serialization;
 
 namespace PaymentGatewayApi.PaymentModels
@@ -31,6 +29,7 @@ namespace PaymentGatewayApi.PaymentModels
         [Column(TypeName = "int")]
         public int Amount { get; set; }
 
+        //Types false= Purchase, true= Shipping (shipping number not default value)
         [Required]
         [Column(TypeName = "bit")]
         public bool TypeTransaction { get; set; }
@@ -45,8 +44,9 @@ namespace PaymentGatewayApi.PaymentModels
 
         [Required]
         [Column(TypeName = "DateTime")]
-        public DateTime BeginTransaction { get; set; }
+        public virtual DateTime BeginTransaction { get; set; }
 
+        // In Progress,Shipped, Confirmed, Canceled
         [Required]
         [Column(TypeName = "nvarchar")]
         public string Status { get; set; }
@@ -58,14 +58,15 @@ namespace PaymentGatewayApi.PaymentModels
         [Column(TypeName = "int")]
         public int UserId { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [ForeignKey("UserId")]
-        public virtual Users UserTrans { get; set; }
+        public virtual Users? UserTrans { get; set; }
 
         public int PaymethodId { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [ForeignKey("PaymethodId")]
-        public virtual Paymethods PaymethodTrans { get; set; }
+        public virtual Paymethods? PaymethodTrans { get; set; }
     }
     public class Transfers
     {
@@ -145,7 +146,7 @@ namespace PaymentGatewayApi.PaymentModels
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [ForeignKey("UserId")]
-        public virtual Users UserPaymethod { get; set; }
+        public virtual Users? UserPaymethod { get; set; }
 
     }
 }

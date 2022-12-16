@@ -12378,9 +12378,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\luis.martin\\source\\repos\\PaymentGatewayApi\\PaymentGateTest\\PaymentGateTest.csproj",
-      "projectName": "PaymentGateTest",
-      "projectPath": "C:\\Users\\luis.martin\\source\\repos\\PaymentGatewayApi\\PaymentGateTest\\PaymentGateTest.csproj",
+      "projectUniqueName": "C:\\Users\\luis.martin\\source\\repos\\PaymentGatewayApi\\PaymentGateTest\\PaymentGatewayApiTests.csproj",
+      "projectName": "PaymentGatewayApiTests",
+      "projectPath": "C:\\Users\\luis.martin\\source\\repos\\PaymentGatewayApi\\PaymentGateTest\\PaymentGatewayApiTests.csproj",
       "packagesPath": "C:\\Users\\luis.martin\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\luis.martin\\source\\repos\\PaymentGatewayApi\\PaymentGateTest\\obj\\",
       "projectStyle": "PackageReference",

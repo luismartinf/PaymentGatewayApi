@@ -1,16 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentGatewayApi.Controllers;
 using PaymentGatewayApi.PaymentModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PaymentGateTest
 {
     [TestClass]
-    internal class IntegratingTesting
+    internal class ControllersIntegratingTests
     {
         [TestMethod]
         public void PostPaymethods_okResult_Integrating()
@@ -39,6 +34,34 @@ namespace PaymentGateTest
             //Act
             var usersController = new UsersController(null, null);
             var actionResult = usersController.PostUser(newUser);
+
+            //Assert
+            Assert.IsNotNull(actionResult);
+        }
+
+        [TestMethod]
+        public void PostTransaction_okResult_Integrating()
+        {
+            //Arrange
+            Transactions newtransaction = new() {Item = "ABFD56479032", TransactionId=1, Amount = 6890, PaymethodId = 1, ShippingOrder = 0, Status = "In Progress", TypeTransaction = false, UserId = 2};
+
+            //Act
+            var transactionController = new TransactionsController(null);
+            var actionResult = transactionController.PostTransactions(newtransaction);
+
+            //Assert
+            Assert.IsNotNull(actionResult);
+        }
+
+        [TestMethod]
+        public void PostTransfer_okResult_Integrating()
+        {
+            //Arrange
+            Transfers newtransfer = new() {TransferId=1, Amount=6890, TransactionId=2, UserId=2, TypeTranfer="Payment"};
+
+            //Act
+            var transferController = new TransfersController(null);
+            var actionResult = transferController.PostTransfer(newtransfer);
 
             //Assert
             Assert.IsNotNull(actionResult);

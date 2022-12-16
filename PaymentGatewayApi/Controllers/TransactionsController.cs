@@ -5,8 +5,6 @@ using System.Data.Entity.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using FakeItEasy;
-using System.Data.Entity;
-using System.Security.Principal;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -76,6 +74,8 @@ namespace PaymentGatewayApi.Controllers
             newtrans!.UserTrans = updateuser!;
             Paymethods? updatepay = new PaymethodsController(_context).GetPaymethodbyId(newtrans.PaymethodId).Value;
             newtrans!.PaymethodTrans = updatepay!;
+            newtrans.BeginTransaction = DateTime.Now;
+            newtrans!.PaymethodTrans.UserPaymethod = null;
 
             try
             {
@@ -87,6 +87,11 @@ namespace PaymentGatewayApi.Controllers
             catch (InvalidOperationException)
             {
                 var actionResult = new JsonResult(new { Message = "Foreign Key doesn´t match" }) { StatusCode = 409 };
+                return actionResult;
+            }
+            catch (NotImplementedException)
+            {
+                var actionResult = new JsonResult(new { Message = "MarkAsModified may be not implemented" }) { StatusCode = 501 };
                 return actionResult;
             }
         }
@@ -102,11 +107,10 @@ namespace PaymentGatewayApi.Controllers
                 return BadRequest();
             }
 
-            //_context.Entry(BookModel).State = EntityState.Modified;
-            _context.MarkAsModified(trans);
-
             try
             {
+                if (trans.Status=="confirmed" || trans.Status=="canceled") { trans.FinishTransaction = DateTime.Now; }
+                _context.MarkAsModified(trans);
                 _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)

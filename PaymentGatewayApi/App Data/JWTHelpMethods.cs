@@ -38,7 +38,7 @@ namespace PaymentGatewayApi.App_Data
             if (model == null) throw new ArgumentException(nameof(model));
             Guid Id;
             var claims = JWTHelpMethods.GetClaims(model, out Id);
-            DateTime expireTime = DateTime.Now.AddMinutes(15);
+            DateTime expireTime = DateTime.Now.AddMinutes(1);
             userToken.ExpiredTime = expireTime;
             userToken.Validaty = expireTime.TimeOfDay;
             var JWToken = new JwtSecurityToken(config["JsonWebToken:Issuer"], config["JsonWebToken:Audience"], claims, expires: DateTime.Now.AddMinutes(15), signingCredentials: credentials);

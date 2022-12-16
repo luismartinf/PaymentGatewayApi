@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SZtihL02jWbDyPHomUHrVu99I998O8FWwPmrpoXGCm2UpqbW8KnVSUVVUVA1bG6tYshT6cMrLxSpU5KMSGZSdg==",
+  "dgSpecHash": "FRN/65lAH0OJqlbAMmI1kfYL5T/OSiVMFK12zUL4/8K+bnEW4a3mT+z1aLayBzQcOTfl24AYEOD/nZ30XPjIow==",
   "success": true,
-  "projectFilePath": "C:\\Users\\luis.martin\\source\\repos\\PaymentGatewayApi\\PaymentGateTest\\PaymentGateTest.csproj",
+  "projectFilePath": "C:\\Users\\luis.martin\\source\\repos\\PaymentGatewayApi\\PaymentGateTest\\PaymentGatewayApiTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\luis.martin\\.nuget\\packages\\castle.core\\4.3.1\\castle.core.4.3.1.nupkg.sha512",
     "C:\\Users\\luis.martin\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",

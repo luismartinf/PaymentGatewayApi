@@ -1,15 +1,9 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using NuGet.Common;
 using PaymentGatewayApi.App_Data;
 using PaymentGatewayApi.PaymentModels;
-using System.Data.Entity.Infrastructure;
-using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
-using System.Text;
-using System.Xml.Linq;
+
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
